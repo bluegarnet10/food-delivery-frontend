@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { SessionContext } from 'Contexts/SessionContext';
 
 import styles from './Signin.module.scss';
-import { setOriginalNode } from 'typescript';
 
 const Signin = () => {
 	const { requestUserSignin } = useContext(SessionContext);
