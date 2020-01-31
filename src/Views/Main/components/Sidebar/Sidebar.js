@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import BlockIcon from '@material-ui/icons/Block';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { SessionContext } from 'Contexts/SessionContext';
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
+	const { getRole } = useContext(SessionContext);
+
 	const useStyles = makeStyles(theme => ({
 		drawer: {
 			width: drawerWidth,
@@ -19,10 +25,22 @@ const Sidebar = () => {
 		drawerPaper: {
 			width: drawerWidth,
 		},
+		link: {
+			color: 'black',
+		},
 		toolbar: theme.mixins.toolbar,
 	}));
 
 	const classes = useStyles();
+
+	const routes = [
+		{ to: '/', name: 'Orders', icon: <ShoppingCartIcon /> },
+		{ to: '/restaurants', name: 'Restaurants', icon: <RestaurantIcon /> },
+	];
+
+	if (getRole() === 'owner') {
+		routes.push({ to: '/block', name: 'Blocked', icon: <BlockIcon /> });
+	}
 
 	return (
 		<Drawer
@@ -34,11 +52,13 @@ const Sidebar = () => {
 		>
 			<div className={classes.toolbar} />
 			<List>
-				{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-					<ListItem button key={text}>
-						<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-						<ListItemText primary={text} />
-					</ListItem>
+				{routes.map((route, idx) => (
+					<Link to={route.to} key={idx} className={classes.link}>
+						<ListItem button>
+							<ListItemIcon>{route.icon}</ListItemIcon>
+							<ListItemText primary={route.name} />
+						</ListItem>
+					</Link>
 				))}
 			</List>
 		</Drawer>

@@ -15,11 +15,11 @@ const SessionContextProvider = ({ children }) => {
 	};
 
 	const getUsername = () => {
-		if (checkAuthentication() ? localStorage.getItem('username') : '');
+		return checkAuthentication() ? localStorage.getItem('username') : '';
 	};
 
 	const getRole = () => {
-		if (checkAuthentication() ? localStorage.getItem('role') : '');
+		return checkAuthentication() ? localStorage.getItem('role') : '';
 	};
 
 	const requestUserSignin = (email, password) => {
