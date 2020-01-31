@@ -1,0 +1,20 @@
+.wrapper {
+	width: 100%;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.text_field {
+	height: 50px;
+	input {
+		box-shadow: none !important;
+	}
+}
+
+.button {
+	width: 200px;
+	margin-top: 20px;
+}
