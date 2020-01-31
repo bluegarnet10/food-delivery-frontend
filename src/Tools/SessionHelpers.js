@@ -12,7 +12,3 @@ export const checkAuthentication = () => {
 		return false;
 	}
 };
-
-export const getUsername = () => {
-	if (checkAuthentication() ? localStorage.getItem('username') : '');
-};

@@ -3,10 +3,11 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import BookContextProvider from 'Contexts/BookContext';
 import SessionContextProvider from 'Contexts/SessionContext';
-import { checkAuthentication, getUsername } from 'Tools/SessionHelpers';
+import { checkAuthentication } from 'Tools/SessionHelpers';
 
 import Main from 'Views/Main';
 import Signin from 'Views/Auth/Signin';
+import Signup from 'Views/Auth/Signup';
 
 import './App.css';
 
@@ -29,6 +30,7 @@ const App = () => {
 				<BrowserRouter>
 					<Switch>
 						<RedirectedRoute exact path="/signin" component={Signin} />
+						<RedirectedRoute exact path="/signup" component={Signup} />
 						<ProtectedRoute path="/" component={Main} />
 					</Switch>
 				</BrowserRouter>

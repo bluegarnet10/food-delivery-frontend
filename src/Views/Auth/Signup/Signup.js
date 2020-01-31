@@ -1,18 +1,19 @@
 import React, { useState, useContext } from 'react';
-import { MuiThemeProvider, RaisedButton, TextField } from 'material-ui';
 import { useHistory } from 'react-router-dom';
+import { MuiThemeProvider, RaisedButton, TextField, SelectField, MenuItem } from 'material-ui';
 
 import { SessionContext } from 'Contexts/SessionContext';
 
-import styles from './Signin.module.scss';
-import { setOriginalNode } from 'typescript';
+import styles from './Signup.module.scss';
 
 const Signin = () => {
-	const { requestUserSignin } = useContext(SessionContext);
+	const { requestUserSignup } = useContext(SessionContext);
 	const history = useHistory();
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [name, setName] = useState('');
+	const [role, setRole] = useState('user');
 	const [errors, setErrors] = useState({});
 
 	const handleValidation = (field, value) => {
@@ -29,6 +30,8 @@ const Signin = () => {
 			setEmail(value);
 		} else if (field === 'password') {
 			setPassword(value);
+		} else if (field === 'name') {
+			setName(value);
 		}
 
 		const error = { ...errors, ...handleValidation(field, value) };
@@ -38,19 +41,28 @@ const Signin = () => {
 		setErrors(error);
 	};
 
+	const handleRoleChange = (e, index, value) => {
+		setRole(value);
+	};
+
 	const handleSubmit = e => {
 		e.preventDefault();
-		const error = { ...errors, ...handleValidation('email', email), ...handleValidation('password', password) };
+		const error = {
+			...errors,
+			...handleValidation('email', email),
+			...handleValidation('password', password),
+			...handleValidation('name', name),
+		};
 		const userCredentialsValid = Object.keys(error).filter(field => error[field] !== '').length === 0;
 		if (!userCredentialsValid) {
 			setErrors(error);
 			return;
 		} else {
-			requestUserSignin(email, password).then(res => {
+			requestUserSignup(email, password, name, role).then(res => {
 				if (res.errors) {
 					setErrors(res.errors);
 				} else {
-					history.push('/');
+					history.push('/signin');
 				}
 			});
 		}
@@ -60,7 +72,7 @@ const Signin = () => {
 		<form className={styles.wrapper} onSubmit={handleSubmit}>
 			<MuiThemeProvider>
 				<>
-					<h2>Sign in</h2>
+					<h2>Sign up</h2>
 					<TextField
 						id="email"
 						type="email"
@@ -81,14 +93,32 @@ const Signin = () => {
 						onChange={handleInputChange}
 						errorText={errors.password}
 					/>
+					<TextField
+						id="name"
+						hintText="Enter your name"
+						floatingLabelText="Name"
+						className={styles.text_field}
+						value={name}
+						onChange={handleInputChange}
+						errorText={errors.name}
+					/>
+					<SelectField
+						value={role}
+						onChange={handleRoleChange}
+						floatingLabelText="Role"
+						errorText={errors.role}
+					>
+						<MenuItem value="user" primaryText="User" />
+						<MenuItem value="owner" primaryText="Restaurant Owner" />
+					</SelectField>
 					<br />
-					<RaisedButton type="submit" label="Sign in" primary={true} className={styles.button} />
+					<RaisedButton type="submit" label="Sign up" primary={true} className={styles.button} />
 					<RaisedButton
 						type="button"
-						label="Sign up"
+						label="Sign in"
 						primary={true}
 						className={styles.button}
-						onClick={() => history.push('/signup')}
+						onClick={() => history.push('/signin')}
 					/>
 				</>
 			</MuiThemeProvider>
