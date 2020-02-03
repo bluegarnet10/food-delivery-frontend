@@ -55,7 +55,6 @@ const RestaurantContextProvider = ({ children }) => {
 				if (res.errors) {
 					return res;
 				}
-				await getRestaurants();
 				return res;
 			});
 	};
@@ -67,7 +66,6 @@ const RestaurantContextProvider = ({ children }) => {
 				if (res.errors) {
 					return res;
 				}
-				await getRestaurants();
 				return res;
 			});
 	};
@@ -79,7 +77,6 @@ const RestaurantContextProvider = ({ children }) => {
 				if (res.errors) {
 					return null;
 				}
-				await getRestaurants();
 				return res;
 			});
 	};

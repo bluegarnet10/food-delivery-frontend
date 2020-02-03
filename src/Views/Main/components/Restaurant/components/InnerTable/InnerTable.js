@@ -46,11 +46,15 @@ const InnerTable = ({ editable }) => {
 		history.push('/restaurant/add');
 	};
 
-	const handleEditItem = () => {};
+	const handleEditItem = details => {
+		history.push(`/restaurant/edit/${details._id}`);
+	};
 
 	const handleDeleteItem = async details => {
 		if (window.confirm('Are you sure to delete this restaurant?')) {
 			await deleteRestaurant(details);
+			setPage(0);
+			requestData();
 		}
 	};
 

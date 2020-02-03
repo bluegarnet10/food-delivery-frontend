@@ -29,7 +29,7 @@ const Main = () => {
 			<main className={classes.content}>
 				<div className={classes.toolbar} />
 				<Switch>
-					<Route exact path="/restaurant" component={Restaurant} />
+					<Route path="/restaurant" component={Restaurant} />
 					<Redirect from="/" to="/restaurant" />
 				</Switch>
 			</main>

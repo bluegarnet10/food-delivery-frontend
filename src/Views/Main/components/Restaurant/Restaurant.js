@@ -5,7 +5,7 @@ import RestaurantContextProvider from 'Contexts/RestaurantContext';
 import { SessionContext } from 'Contexts/SessionContext';
 
 import InnerTable from './components/InnerTable';
-import AddForm from './components/AddForm';
+import InnerForm from './components/InnerForm';
 
 const Main = () => {
 	const { getRole } = useContext(SessionContext);
@@ -13,8 +13,13 @@ const Main = () => {
 	return (
 		<RestaurantContextProvider>
 			<Switch>
-				{getRole() === 'owner' && <Route exact path="/restaurant/add" component={AddForm} />}
 				<Route exact path="/restaurant" render={() => <InnerTable editable={getRole() === 'owner'} />} />
+				{getRole() === 'owner' && (
+					<Route exact path="/restaurant/add" render={() => <InnerForm isEdit={false} />} />
+				)}
+				{getRole() === 'owner' && (
+					<Route exact path="/restaurant/edit/:id" component={() => <InnerForm isEdit={true} />} />
+				)}
 			</Switch>
 		</RestaurantContextProvider>
 	);
