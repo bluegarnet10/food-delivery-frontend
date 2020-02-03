@@ -2,12 +2,11 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Dashboard from 'Components/Dashboard';
-import About from 'Components/About';
-import Contact from 'Components/Contact';
+import RestaurantContextProvider from 'Contexts/RestaurantContext';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import Restaurant from './components/Restaurant';
 
 const Main = () => {
 	const useStyles = makeStyles(theme => ({
@@ -23,18 +22,18 @@ const Main = () => {
 	const classes = useStyles();
 
 	return (
-		<div className={classes.root}>
-			<Header />
-			<Sidebar />
-			<main className={classes.content}>
-				<div className={classes.toolbar} />
-				<Switch>
-					<Route exact path="/" component={Dashboard} />
-					<Route path="/about" component={About} />
-					<Route path="/contact" component={Contact} />
-				</Switch>
-			</main>
-		</div>
+		<RestaurantContextProvider>
+			<div className={classes.root}>
+				<Header />
+				<Sidebar />
+				<main className={classes.content}>
+					<div className={classes.toolbar} />
+					<Switch>
+						<Route exact path="/" component={Restaurant} />
+					</Switch>
+				</main>
+			</div>
+		</RestaurantContextProvider>
 	);
 };
 
