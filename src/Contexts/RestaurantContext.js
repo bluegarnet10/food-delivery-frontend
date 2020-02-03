@@ -20,8 +20,15 @@ const RestaurantContextProvider = ({ children }) => {
 	const [restaurants, setRestaurants] = useState([]);
 	const [totalCount, setTotalCount] = useState(0);
 
-	const getRestaurants = () => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('get'))
+	const getRestaurants = (details = {}) => {
+		const url =
+			process.env.REACT_APP_REST_SERVER +
+			'/restaurant/' +
+			'?_page=' +
+			(details._page ? details._page : 0) +
+			'&_row=' +
+			(details._row ? details._row : 5);
+		return fetch(url, options('get'))
 			.then(res => {
 				if (res.ok) {
 					for (var pair of res.headers.entries()) {
@@ -46,10 +53,10 @@ const RestaurantContextProvider = ({ children }) => {
 			.then(res => res.json())
 			.then(async res => {
 				if (res.errors) {
-					return null;
+					return res;
 				}
 				await getRestaurants();
-				return res.restaurant;
+				return res;
 			});
 	};
 
@@ -58,10 +65,10 @@ const RestaurantContextProvider = ({ children }) => {
 			.then(res => res.json())
 			.then(async res => {
 				if (res.errors) {
-					return null;
+					return res;
 				}
 				await getRestaurants();
-				return res.restaurant;
+				return res;
 			});
 	};
 

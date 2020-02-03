@@ -34,8 +34,8 @@ const Sidebar = () => {
 	const classes = useStyles();
 
 	const routes = [
-		{ to: '/', name: 'Restaurants', icon: <RestaurantIcon /> },
-		{ to: '/orders', name: 'Orders', icon: <ShoppingCartIcon /> },
+		{ to: '/restaurant', name: 'Restaurants', icon: <RestaurantIcon /> },
+		{ to: '/order', name: 'Orders', icon: <ShoppingCartIcon /> },
 	];
 
 	if (getRole() === 'owner') {

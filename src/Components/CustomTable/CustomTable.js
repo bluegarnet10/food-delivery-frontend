@@ -1,0 +1,157 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles({
+	table: {
+		minWidth: 500,
+	},
+	toolbar: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+});
+
+const CustomTable = ({
+	title,
+	data,
+	columns,
+	editable,
+	totalCount,
+	page,
+	rowsPerPage,
+	onChangePage,
+	onChangeRowsPerPage,
+	onAddItem,
+	onEditItem,
+	onDeleteItem,
+	onClickItem,
+}) => {
+	const classes = useStyles();
+
+	return (
+		<Paper>
+			<Toolbar className={classes.toolbar}>
+				<Typography className={classes.title} variant="h6" id="tableTitle">
+					{title}
+				</Typography>
+				{editable && (
+					<Fab size="small" color="primary" aria-label="add" className={classes.margin} onClick={onAddItem}>
+						<AddIcon />
+					</Fab>
+				)}
+			</Toolbar>
+			<TableContainer>
+				<Table className={classes.table} aria-label="custom table">
+					<TableHead>
+						<TableRow>
+							{columns.map((value, idx) => (
+								<TableCell key={idx}>{value.title}</TableCell>
+							))}
+							{editable && <TableCell>Actions</TableCell>}
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{data.map(row => (
+							<TableRow key={row.name} onClick={() => onClickItem(row)}>
+								{columns.map((value, idx) => (
+									<TableCell key={idx}>{row[value.field]}</TableCell>
+								))}
+								{editable && (
+									<TableCell>
+										<IconButton
+											color="primary"
+											onClick={e => {
+												e.stopPropagation();
+												onEditItem(row);
+											}}
+										>
+											<EditIcon />
+										</IconButton>
+										<IconButton
+											color="secondary"
+											onClick={e => {
+												e.stopPropagation();
+												onDeleteItem(row);
+											}}
+										>
+											<DeleteIcon />
+										</IconButton>
+									</TableCell>
+								)}
+							</TableRow>
+						))}
+					</TableBody>
+					<TableFooter>
+						<TableRow>
+							<TablePagination
+								rowsPerPageOptions={[5, 10, 25]}
+								colSpan={3}
+								count={totalCount}
+								rowsPerPage={rowsPerPage}
+								page={page}
+								SelectProps={{
+									inputProps: { 'aria-label': 'rows per page' },
+									native: true,
+								}}
+								onChangePage={onChangePage}
+								onChangeRowsPerPage={onChangeRowsPerPage}
+							/>
+						</TableRow>
+					</TableFooter>
+				</Table>
+			</TableContainer>
+		</Paper>
+	);
+};
+
+CustomTable.propTypes = {
+	title: PropTypes.string,
+	data: PropTypes.array,
+	columns: PropTypes.array,
+	editable: PropTypes.bool,
+	totalCount: PropTypes.number,
+	page: PropTypes.number,
+	rowsPerPage: PropTypes.number,
+	onChangePage: PropTypes.func,
+	onChangeRowsPerPage: PropTypes.func,
+	onAddItem: PropTypes.func,
+	onEditItem: PropTypes.func,
+	onDeleteItem: PropTypes.func,
+	onClickItem: PropTypes.func,
+};
+
+CustomTable.defaultProps = {
+	title: '',
+	data: [],
+	columns: [],
+	editable: false,
+	totalCount: 0,
+	page: 0,
+	rowsPerPage: 5,
+	onChangePage: () => {},
+	onChangeRowsPerPage: () => {},
+	onAddItem: () => {},
+	onEditItem: () => {},
+	onDeleteItem: () => {},
+	onClickItem: () => {},
+};
+
+export default CustomTable;

@@ -1,14 +1,15 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import RestaurantContextProvider from 'Contexts/RestaurantContext';
+import { SessionContext } from 'Contexts/SessionContext';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Restaurant from './components/Restaurant';
 
 const Main = () => {
+	const { getRole } = useContext(SessionContext);
 	const useStyles = makeStyles(theme => ({
 		root: {
 			display: 'flex',
@@ -22,18 +23,17 @@ const Main = () => {
 	const classes = useStyles();
 
 	return (
-		<RestaurantContextProvider>
-			<div className={classes.root}>
-				<Header />
-				<Sidebar />
-				<main className={classes.content}>
-					<div className={classes.toolbar} />
-					<Switch>
-						<Route exact path="/" component={Restaurant} />
-					</Switch>
-				</main>
-			</div>
-		</RestaurantContextProvider>
+		<div className={classes.root}>
+			<Header />
+			<Sidebar />
+			<main className={classes.content}>
+				<div className={classes.toolbar} />
+				<Switch>
+					<Route exact path="/restaurant" component={Restaurant} />
+					<Redirect from="/" to="/restaurant" />
+				</Switch>
+			</main>
+		</div>
 	);
 };
 
