@@ -18,10 +18,20 @@ const RestaurantContextProvider = ({ children }) => {
 	};
 
 	const [restaurants, setRestaurants] = useState([]);
+	const [totalCount, setTotalCount] = useState(0);
 
 	const getRestaurants = () => {
 		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('get'))
-			.then(res => res.json())
+			.then(res => {
+				if (res.ok) {
+					for (var pair of res.headers.entries()) {
+						if (pair[0] === 'x-total-count') {
+							setTotalCount(pair[1]);
+						}
+					}
+				}
+				return res.json();
+			})
 			.then(res => {
 				if (res.errors) {
 					return null;
@@ -69,7 +79,7 @@ const RestaurantContextProvider = ({ children }) => {
 
 	return (
 		<RestaurantContext.Provider
-			value={{ restaurants, getRestaurants, addRestaurant, updateRestaurant, deleteRestaurant }}
+			value={{ totalCount, restaurants, getRestaurants, addRestaurant, updateRestaurant, deleteRestaurant }}
 		>
 			{children}
 		</RestaurantContext.Provider>
