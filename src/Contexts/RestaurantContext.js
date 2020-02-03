@@ -11,7 +11,7 @@ const RestaurantContextProvider = ({ children }) => {
 			},
 			method: method,
 		};
-		if (method !== 'get') {
+		if (method !== 'get' && method !== 'delete') {
 			config.body = JSON.stringify(data);
 		}
 		return config;
@@ -44,7 +44,7 @@ const RestaurantContextProvider = ({ children }) => {
 	};
 
 	const updateRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('put', details))
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('put', details))
 			.then(res => res.json())
 			.then(async res => {
 				if (res.errors) {
@@ -56,7 +56,7 @@ const RestaurantContextProvider = ({ children }) => {
 	};
 
 	const deleteRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('delete'))
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('delete'))
 			.then(res => res.json())
 			.then(async res => {
 				if (res.errors) {
@@ -68,7 +68,9 @@ const RestaurantContextProvider = ({ children }) => {
 	};
 
 	return (
-		<RestaurantContext.Provider value={{ restaurants, getRestaurants, addRestaurant }}>
+		<RestaurantContext.Provider
+			value={{ restaurants, getRestaurants, addRestaurant, updateRestaurant, deleteRestaurant }}
+		>
 			{children}
 		</RestaurantContext.Provider>
 	);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MaterialTable from 'material-table';
 
 import { RestaurantContext } from 'Contexts/RestaurantContext';
@@ -6,14 +6,20 @@ import { RestaurantContext } from 'Contexts/RestaurantContext';
 import styles from './Restaurant.module.scss';
 
 const Restaurant = () => {
-	const { restaurants, getRestaurants, addRestaurant, updateRestaurant } = useContext(RestaurantContext);
+	const { restaurants, getRestaurants, addRestaurant, updateRestaurant, deleteRestaurant } = useContext(
+		RestaurantContext
+	);
+	const [isFirst, setFirst] = useState(true);
 	const columns = [
 		{ title: 'Name', field: 'name' },
 		{ title: 'Description', field: 'description' },
 	];
 
 	useEffect(() => {
-		// getRestaurants();
+		if (isFirst) {
+			getRestaurants();
+			setFirst(false);
+		}
 	});
 
 	return (
@@ -39,17 +45,15 @@ const Restaurant = () => {
 							}
 						}, 600);
 					}),
-				// onRowDelete: oldData =>
-				// 	new Promise(resolve => {
-				// 		setTimeout(() => {
-				// 			resolve();
-				// 			setState(prevState => {
-				// 				const data = [...prevState.data];
-				// 				data.splice(data.indexOf(oldData), 1);
-				// 				return { ...prevState, data };
-				// 			});
-				// 		}, 600);
-				// 	}),
+				onRowDelete: oldData =>
+					new Promise(resolve => {
+						setTimeout(async () => {
+							resolve();
+							if (oldData) {
+								await deleteRestaurant(oldData);
+							}
+						}, 600);
+					}),
 			}}
 		/>
 	);
