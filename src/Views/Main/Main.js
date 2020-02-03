@@ -7,6 +7,7 @@ import { SessionContext } from 'Contexts/SessionContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Restaurant from './components/Restaurant';
+import Order from './components/Order';
 
 const Main = () => {
 	const { getRole } = useContext(SessionContext);
@@ -30,6 +31,7 @@ const Main = () => {
 				<div className={classes.toolbar} />
 				<Switch>
 					<Route path="/restaurant" component={Restaurant} />
+					<Route path="/order" component={Order} />
 					<Redirect from="/" to="/restaurant" />
 				</Switch>
 			</main>

@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import { MealContext } from 'Contexts/MealContext';
+import { OrderContext } from 'Contexts/OrderContext';
 import CustomTable from 'Components/CustomTable';
+import OrderTable from 'Components/OrderTable';
 
 const InnerTable = ({ restaurant_id, editable }) => {
 	const { totalCount, meals, getMeals, deleteMeal } = useContext(MealContext);
+	const { addOrder } = useContext(OrderContext);
 	const history = useHistory();
 	const [isFirst, setFirst] = useState(true);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const [orders, setOrders] = useState([]);
 	const columns = [
 		{ title: 'Name', field: 'name' },
 		{ title: 'Description', field: 'description' },
@@ -62,26 +66,51 @@ const InnerTable = ({ restaurant_id, editable }) => {
 		}
 	};
 
-	const handleClickItem = item => {
-		console.log(item);
+	const handleAddToOrder = details => {
+		setOrders([...orders, details]);
+	};
+
+	const handleDeleteOrder = index => {
+		setOrders(orders.filter((order, idx) => idx !== index));
+	};
+
+	const handleSubmitOrder = () => {
+		const meal_list = [];
+		orders.map(item => meal_list.push(item._id));
+		addOrder({ restaurant_id, meal_list }).then(res => {
+			if (!res.errors) {
+				history.push('/order');
+			}
+		});
 	};
 
 	return (
-		<CustomTable
-			title="Meals"
-			data={meals}
-			columns={columns}
-			editable={editable}
-			totalCount={Number(totalCount)}
-			page={page}
-			rowsPerPage={rowsPerPage}
-			onChangePage={handleChangePage}
-			onChangeRowsPerPage={handleChangeRowsPerPage}
-			onAddItem={handleAddItem}
-			onEditItem={handleEditItem}
-			onDeleteItem={handleDeleteItem}
-			onClickItem={handleClickItem}
-		/>
+		<>
+			<CustomTable
+				title="Meals"
+				data={meals}
+				columns={columns}
+				totalCount={Number(totalCount)}
+				page={page}
+				rowsPerPage={rowsPerPage}
+				onChangePage={handleChangePage}
+				onChangeRowsPerPage={handleChangeRowsPerPage}
+				onAddItem={editable ? handleAddItem : null}
+				onEditItem={editable ? handleEditItem : null}
+				onDeleteItem={editable ? handleDeleteItem : null}
+				onAddToOrder={!editable ? handleAddToOrder : null}
+			/>
+			<br />
+			{!editable && (
+				<OrderTable
+					title="Order"
+					data={orders}
+					columns={columns}
+					onDeleteItem={handleDeleteOrder}
+					onSubmitOrder={handleSubmitOrder}
+				/>
+			)}
+		</>
 	);
 };
 

@@ -54,42 +54,21 @@ const MealContextProvider = ({ children }) => {
 		return fetch(
 			process.env.REACT_APP_REST_SERVER + '/restaurant/' + restaurant_id + '/meal',
 			options('post', details)
-		)
-			.then(res => res.json())
-			.then(async res => {
-				if (res.errors) {
-					return res;
-				}
-				return res;
-			});
+		).then(res => res.json());
 	};
 
 	const updateMeal = (restaurant_id, details) => {
 		return fetch(
 			process.env.REACT_APP_REST_SERVER + '/restaurant/' + restaurant_id + '/meal/' + details._id,
 			options('put', details)
-		)
-			.then(res => res.json())
-			.then(async res => {
-				if (res.errors) {
-					return res;
-				}
-				return res;
-			});
+		).then(res => res.json());
 	};
 
 	const deleteMeal = (restaurant_id, details) => {
 		return fetch(
 			process.env.REACT_APP_REST_SERVER + '/restaurant/' + restaurant_id + '/meal/' + details._id,
 			options('delete')
-		)
-			.then(res => res.json())
-			.then(async res => {
-				if (res.errors) {
-					return null;
-				}
-				return res;
-			});
+		).then(res => res.json());
 	};
 
 	return (

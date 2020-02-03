@@ -17,6 +17,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles({
 	table: {
@@ -33,7 +34,6 @@ const CustomTable = ({
 	title,
 	data,
 	columns,
-	editable,
 	totalCount,
 	page,
 	rowsPerPage,
@@ -43,6 +43,7 @@ const CustomTable = ({
 	onEditItem,
 	onDeleteItem,
 	onClickItem,
+	onAddToOrder,
 }) => {
 	const classes = useStyles();
 
@@ -52,7 +53,7 @@ const CustomTable = ({
 				<Typography className={classes.title} variant="h6" id="tableTitle">
 					{title}
 				</Typography>
-				{editable && (
+				{onAddItem && (
 					<Fab size="small" color="primary" aria-label="add" className={classes.margin} onClick={onAddItem}>
 						<AddIcon />
 					</Fab>
@@ -65,35 +66,51 @@ const CustomTable = ({
 							{columns.map((value, idx) => (
 								<TableCell key={idx}>{value.title}</TableCell>
 							))}
-							{editable && <TableCell>Actions</TableCell>}
+							{(onEditItem || onDeleteItem || onAddToOrder) && <TableCell>Actions</TableCell>}
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data.map(row => (
-							<TableRow key={row.name} onClick={() => onClickItem(row)}>
+						{data.map((row, index) => (
+							<TableRow key={index} onClick={() => onClickItem(row)}>
 								{columns.map((value, idx) => (
 									<TableCell key={idx}>{row[value.field]}</TableCell>
 								))}
-								{editable && (
+								{(onEditItem || onDeleteItem || onAddToOrder) && (
 									<TableCell>
-										<IconButton
-											color="primary"
-											onClick={e => {
-												e.stopPropagation();
-												onEditItem(row);
-											}}
-										>
-											<EditIcon />
-										</IconButton>
-										<IconButton
-											color="secondary"
-											onClick={e => {
-												e.stopPropagation();
-												onDeleteItem(row);
-											}}
-										>
-											<DeleteIcon />
-										</IconButton>
+										{onEditItem && (
+											<IconButton
+												color="primary"
+												onClick={e => {
+													e.stopPropagation();
+													onEditItem(row);
+												}}
+											>
+												<EditIcon />
+											</IconButton>
+										)}
+										{onDeleteItem && (
+											<IconButton
+												color="secondary"
+												onClick={e => {
+													e.stopPropagation();
+													onDeleteItem(row);
+												}}
+											>
+												<DeleteIcon />
+											</IconButton>
+										)}
+										{onAddToOrder && (
+											<Button
+												variant="contained"
+												color="secondary"
+												onClick={e => {
+													e.stopPropagation();
+													onAddToOrder(row);
+												}}
+											>
+												Add To Order
+											</Button>
+										)}
 									</TableCell>
 								)}
 							</TableRow>
@@ -126,7 +143,6 @@ CustomTable.propTypes = {
 	title: PropTypes.string,
 	data: PropTypes.array,
 	columns: PropTypes.array,
-	editable: PropTypes.bool,
 	totalCount: PropTypes.number,
 	page: PropTypes.number,
 	rowsPerPage: PropTypes.number,
@@ -136,22 +152,23 @@ CustomTable.propTypes = {
 	onEditItem: PropTypes.func,
 	onDeleteItem: PropTypes.func,
 	onClickItem: PropTypes.func,
+	onAddToOrder: PropTypes.func,
 };
 
 CustomTable.defaultProps = {
 	title: '',
 	data: [],
 	columns: [],
-	editable: false,
 	totalCount: 0,
 	page: 0,
 	rowsPerPage: 5,
 	onChangePage: () => {},
 	onChangeRowsPerPage: () => {},
-	onAddItem: () => {},
-	onEditItem: () => {},
-	onDeleteItem: () => {},
 	onClickItem: () => {},
+	onAddItem: null,
+	onEditItem: null,
+	onDeleteItem: null,
+	onAddToOrder: null,
 };
 
 export default CustomTable;

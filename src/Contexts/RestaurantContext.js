@@ -49,36 +49,22 @@ const RestaurantContextProvider = ({ children }) => {
 	};
 
 	const addRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('post', details))
-			.then(res => res.json())
-			.then(async res => {
-				if (res.errors) {
-					return res;
-				}
-				return res;
-			});
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('post', details)).then(res =>
+			res.json()
+		);
 	};
 
 	const updateRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('put', details))
-			.then(res => res.json())
-			.then(async res => {
-				if (res.errors) {
-					return res;
-				}
-				return res;
-			});
+		return fetch(
+			process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id,
+			options('put', details)
+		).then(res => res.json());
 	};
 
 	const deleteRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('delete'))
-			.then(res => res.json())
-			.then(async res => {
-				if (res.errors) {
-					return null;
-				}
-				return res;
-			});
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('delete')).then(res =>
+			res.json()
+		);
 	};
 
 	return (

@@ -70,15 +70,14 @@ const InnerTable = ({ editable }) => {
 			title="Restaurants"
 			data={restaurants}
 			columns={columns}
-			editable={editable}
 			totalCount={Number(totalCount)}
 			page={page}
 			rowsPerPage={rowsPerPage}
 			onChangePage={handleChangePage}
 			onChangeRowsPerPage={handleChangeRowsPerPage}
-			onAddItem={handleAddItem}
-			onEditItem={handleEditItem}
-			onDeleteItem={handleDeleteItem}
+			onAddItem={editable ? handleAddItem : null}
+			onEditItem={editable ? handleEditItem : null}
+			onDeleteItem={editable ? handleDeleteItem : null}
 			onClickItem={handleClickItem}
 		/>
 	);
