@@ -7,23 +7,28 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
-import { RestaurantContext } from 'Contexts/RestaurantContext';
+import { MealContext } from 'Contexts/MealContext';
 
 import styles from './InnerForm.module.scss';
 
-const InnerForm = ({ isEdit }) => {
-	const { addRestaurant, updateRestaurant, restaurants } = useContext(RestaurantContext);
-	const { id } = useParams();
-	const activeItem = isEdit ? restaurants.find(item => item._id === id) : null;
+const InnerForm = ({ restaurant_id, isEdit }) => {
+	const { addMeal, updateMeal, meals } = useContext(MealContext);
+	const { meal_id } = useParams();
+	const activeItem = isEdit ? meals.find(item => item._id === meal_id) : null;
 	const history = useHistory();
 
 	const [name, setName] = useState(activeItem ? activeItem.name : '');
 	const [description, setDescription] = useState(activeItem ? activeItem.description : '');
+	const [price, setPrice] = useState(activeItem ? activeItem.price : '');
 	const [errors, setErrors] = useState({});
 
 	const handleValidation = (field, value) => {
 		const error = {};
-		error[field] = value ? '' : 'This field is required';
+		if (field === 'price') {
+			error[field] = value && Number(value) > 0 ? '' : 'This field is required';
+		} else {
+			error[field] = value ? '' : 'This field is required';
+		}
 		return error;
 	};
 
@@ -35,6 +40,8 @@ const InnerForm = ({ isEdit }) => {
 			setName(value);
 		} else if (field === 'description') {
 			setDescription(value);
+		} else if (field === 'price') {
+			setPrice(value);
 		}
 
 		const error = { ...errors, ...handleValidation(field, value) };
@@ -54,19 +61,19 @@ const InnerForm = ({ isEdit }) => {
 			return;
 		} else {
 			if (isEdit) {
-				updateRestaurant({ _id: id, name, description }).then(res => {
+				updateMeal(restaurant_id, { _id: meal_id, name, description, price: Number(price) }).then(res => {
 					if (res.errors) {
 						setErrors(res.errors);
 					} else {
-						history.push('/restaurant');
+						history.push(`/restaurant/${restaurant_id}`);
 					}
 				});
 			} else {
-				addRestaurant({ name, description }).then(res => {
+				addMeal(restaurant_id, { name, description, price: Number(price) }).then(res => {
 					if (res.errors) {
 						setErrors(res.errors);
 					} else {
-						history.push('/restaurant');
+						history.push(`/restaurant/${restaurant_id}`);
 					}
 				});
 			}
@@ -79,7 +86,7 @@ const InnerForm = ({ isEdit }) => {
 				<Card>
 					<CardContent className={styles.content}>
 						<Typography variant="h4" component="h4">
-							{`${isEdit ? 'Edit' : 'Add'} a restaurant`}
+							{`${isEdit ? 'Edit' : 'Add'} a meal`}
 						</Typography>
 						<TextField
 							id="name"
@@ -99,6 +106,16 @@ const InnerForm = ({ isEdit }) => {
 							onChange={handleInputChange}
 							errorText={errors.description}
 						/>
+						<TextField
+							id="price"
+							type="number"
+							hintText="Enter the price"
+							floatingLabelText="Price"
+							className={styles.text_field}
+							value={price}
+							onChange={handleInputChange}
+							errorText={errors.price}
+						/>
 					</CardContent>
 					<CardActions className={styles.actions}>
 						<RaisedButton type="submit" label={isEdit ? 'Edit' : 'Add'} primary={true} />
@@ -110,10 +127,12 @@ const InnerForm = ({ isEdit }) => {
 };
 
 InnerForm.propTypes = {
+	restaurant_id: PropTypes.string.isRequired,
 	isEdit: PropTypes.bool,
 };
 
 InnerForm.defaultProps = {
+	restaurant_id: '',
 	isEdit: false,
 };
 

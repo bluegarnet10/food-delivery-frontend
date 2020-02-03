@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-import { RestaurantContext } from 'Contexts/RestaurantContext';
+import { MealContext } from 'Contexts/MealContext';
 import CustomTable from 'Components/CustomTable';
 
-const InnerTable = ({ editable }) => {
-	const { totalCount, restaurants, getRestaurants, deleteRestaurant } = useContext(RestaurantContext);
+const InnerTable = ({ restaurant_id, editable }) => {
+	const { totalCount, meals, getMeals, deleteMeal } = useContext(MealContext);
 	const history = useHistory();
 	const [isFirst, setFirst] = useState(true);
 	const [page, setPage] = useState(0);
@@ -14,16 +14,17 @@ const InnerTable = ({ editable }) => {
 	const columns = [
 		{ title: 'Name', field: 'name' },
 		{ title: 'Description', field: 'description' },
+		{ title: 'Price', field: 'price' },
 	];
 
 	const requestData = useCallback(
 		(_page = page, _row = rowsPerPage) => {
-			getRestaurants({
+			getMeals(restaurant_id, {
 				_page,
 				_row,
 			});
 		},
-		[getRestaurants, page, rowsPerPage]
+		[getMeals, page, restaurant_id, rowsPerPage]
 	);
 
 	useEffect(() => {
@@ -31,7 +32,7 @@ const InnerTable = ({ editable }) => {
 			requestData();
 			setFirst(false);
 		}
-	}, [isFirst, getRestaurants, requestData]);
+	}, [isFirst, getMeals, requestData]);
 
 	const handleChangePage = (e, newPage) => {
 		setPage(newPage);
@@ -46,29 +47,29 @@ const InnerTable = ({ editable }) => {
 	};
 
 	const handleAddItem = () => {
-		history.push('/restaurant/add');
+		history.push(`/restaurant/${restaurant_id}/add`);
 	};
 
 	const handleEditItem = details => {
-		history.push(`/restaurant/edit/${details._id}`);
+		history.push(`/restaurant/${restaurant_id}/edit/${details._id}`);
 	};
 
 	const handleDeleteItem = async details => {
 		if (window.confirm('Are you sure to delete this restaurant?')) {
-			await deleteRestaurant(details);
+			await deleteMeal(restaurant_id, details);
 			setPage(0);
 			requestData();
 		}
 	};
 
-	const handleClickItem = details => {
-		history.push(`/restaurant/${details._id}`);
+	const handleClickItem = item => {
+		console.log(item);
 	};
 
 	return (
 		<CustomTable
-			title="Restaurants"
-			data={restaurants}
+			title="Meals"
+			data={meals}
 			columns={columns}
 			editable={editable}
 			totalCount={Number(totalCount)}
@@ -85,10 +86,12 @@ const InnerTable = ({ editable }) => {
 };
 
 InnerTable.propTypes = {
+	restaurant_id: PropTypes.string.isRequired,
 	editable: PropTypes.bool,
 };
 
 InnerTable.defaultProps = {
+	restaurant_id: '',
 	editable: false,
 };
 
