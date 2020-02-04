@@ -41,10 +41,10 @@ const BlockContextProvider = ({ children }) => {
 			})
 			.then(res => {
 				if (res.errors) {
-					return null;
+					return res;
 				}
 				setBlockedUsers(res.blocks);
-				return res.blocks;
+				return res;
 			});
 	};
 

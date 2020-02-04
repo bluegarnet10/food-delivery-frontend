@@ -26,6 +26,10 @@ const InnerTable = ({ restaurant_id, editable }) => {
 			getMeals(restaurant_id, {
 				_page,
 				_row,
+			}).then(res => {
+				if (res.errors) {
+					history.push('/restaurant');
+				}
 			});
 		},
 		[getMeals, page, restaurant_id, rowsPerPage]

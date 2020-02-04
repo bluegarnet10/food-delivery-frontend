@@ -43,10 +43,10 @@ const MealContextProvider = ({ children }) => {
 			})
 			.then(res => {
 				if (res.errors) {
-					return null;
+					return res;
 				}
 				setMeals(res.meals);
-				return res.meals;
+				return res;
 			});
 	};
 

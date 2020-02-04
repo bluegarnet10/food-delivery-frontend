@@ -41,10 +41,10 @@ const RestaurantContextProvider = ({ children }) => {
 			})
 			.then(res => {
 				if (res.errors) {
-					return null;
+					return res;
 				}
 				setRestaurants(res.restaurants);
-				return res.restaurants;
+				return res;
 			});
 	};
 

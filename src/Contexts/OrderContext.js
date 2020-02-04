@@ -41,10 +41,10 @@ const OrderContextProvider = ({ children }) => {
 			})
 			.then(res => {
 				if (res.errors) {
-					return null;
+					return res;
 				}
 				setOrders(res.orders);
-				return res.orders;
+				return res;
 			});
 	};
 
