@@ -62,7 +62,7 @@ const InnerTable = ({ restaurant_id, editable }) => {
 		if (window.confirm('Are you sure to delete this restaurant?')) {
 			await deleteMeal(restaurant_id, details);
 			setPage(0);
-			requestData();
+			requestData(0, rowsPerPage);
 		}
 	};
 

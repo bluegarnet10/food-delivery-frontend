@@ -15,6 +15,7 @@ import {
 
 import { OrderContext } from 'Contexts/OrderContext';
 import { SessionContext } from 'Contexts/SessionContext';
+import { BlockContext } from 'Contexts/BlockContext';
 
 import styles from './OrderDetail.module.scss';
 
@@ -22,6 +23,7 @@ const OrderDetail = () => {
 	const history = useHistory();
 	const { getOrderById, updateOrder } = useContext(OrderContext);
 	const { getRole } = useContext(SessionContext);
+	const { blockUser } = useContext(BlockContext);
 	const { id } = useParams();
 
 	const [isFirst, setFirst] = useState(true);
@@ -69,6 +71,20 @@ const OrderDetail = () => {
 
 	const handleSubmit = e => {
 		e.preventDefault();
+		updateOrder({ _id: id, status: getButtonText() }).then(res => {
+			if (!res.errors) {
+				history.push('/order');
+			}
+		});
+	};
+
+	const handleBlockUser = e => {
+		e.stopPropagation();
+		blockUser(detail.user_id).then(res => {
+			if (!res.errors) {
+				history.push('/block');
+			}
+		});
 	};
 
 	const getMealTable = () => {
@@ -154,7 +170,9 @@ const OrderDetail = () => {
 						{getButtonText() && (
 							<RaisedButton type="submit" label={`Mark as ${getButtonText()}`} primary={true} />
 						)}
-						{getRole() === 'owner' && <RaisedButton type="button" label="Block user" secondary={true} />}
+						{getRole() === 'owner' && (
+							<RaisedButton type="button" label="Block user" secondary={true} onClick={handleBlockUser} />
+						)}
 					</CardActions>
 				</Card>
 			</MuiThemeProvider>

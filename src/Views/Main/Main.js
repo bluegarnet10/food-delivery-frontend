@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Restaurant from './components/Restaurant';
 import Order from './components/Order';
+import Block from './components/Block';
 
 const Main = () => {
 	const { getRole } = useContext(SessionContext);
@@ -32,6 +33,7 @@ const Main = () => {
 				<Switch>
 					<Route path="/restaurant" component={Restaurant} />
 					<Route path="/order" component={Order} />
+					{getRole() === 'owner' && <Route path="/block" component={Block} />}
 					<Redirect from="/" to="/restaurant" />
 				</Switch>
 			</main>

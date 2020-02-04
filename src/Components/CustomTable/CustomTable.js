@@ -46,6 +46,7 @@ const CustomTable = ({
 	onDeleteItem,
 	onClickItem,
 	onAddToOrder,
+	onUnblockUser,
 }) => {
 	const classes = useStyles();
 
@@ -102,7 +103,9 @@ const CustomTable = ({
 							{columns.map((value, idx) => (
 								<TableCell key={idx}>{value.title}</TableCell>
 							))}
-							{(onEditItem || onDeleteItem || onAddToOrder) && <TableCell>Actions</TableCell>}
+							{(onEditItem || onDeleteItem || onAddToOrder || onUnblockUser) && (
+								<TableCell>Actions</TableCell>
+							)}
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -111,7 +114,7 @@ const CustomTable = ({
 								{columns.map((value, idx) => (
 									<TableCell key={idx}>{formatText(row[value.field], value.type)}</TableCell>
 								))}
-								{(onEditItem || onDeleteItem || onAddToOrder) && (
+								{(onEditItem || onDeleteItem || onAddToOrder || onUnblockUser) && (
 									<TableCell>
 										{onEditItem && (
 											<IconButton
@@ -145,6 +148,18 @@ const CustomTable = ({
 												}}
 											>
 												Add To Order
+											</Button>
+										)}
+										{onUnblockUser && (
+											<Button
+												variant="contained"
+												color="secondary"
+												onClick={e => {
+													e.stopPropagation();
+													onUnblockUser(row);
+												}}
+											>
+												Unblock
 											</Button>
 										)}
 									</TableCell>
@@ -189,6 +204,7 @@ CustomTable.propTypes = {
 	onDeleteItem: PropTypes.func,
 	onClickItem: PropTypes.func,
 	onAddToOrder: PropTypes.func,
+	onUnblockUser: PropTypes.func,
 };
 
 CustomTable.defaultProps = {
@@ -205,6 +221,7 @@ CustomTable.defaultProps = {
 	onEditItem: null,
 	onDeleteItem: null,
 	onAddToOrder: null,
+	onUnblockUser: null,
 };
 
 export default CustomTable;
