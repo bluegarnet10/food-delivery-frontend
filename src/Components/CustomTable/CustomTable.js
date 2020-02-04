@@ -51,7 +51,7 @@ const CustomTable = ({
 
 	const formatText = (str, type) => {
 		if (type === 'date') {
-			return new Date(str).toLocaleDateString();
+			return new Date(str).toLocaleString();
 		} else if (type === 'number') {
 			return Number(str).toLocaleString();
 		} else if (type === 'status') {
