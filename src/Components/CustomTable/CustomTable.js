@@ -47,6 +47,15 @@ const CustomTable = ({
 }) => {
 	const classes = useStyles();
 
+	const formatText = (str, type) => {
+		if (type === 'date') {
+			return new Date(str).toLocaleDateString();
+		} else if (type === 'number') {
+			return Number(str).toLocaleString();
+		}
+		return str;
+	};
+
 	return (
 		<Paper>
 			<Toolbar className={classes.toolbar}>
@@ -73,7 +82,7 @@ const CustomTable = ({
 						{data.map((row, index) => (
 							<TableRow key={index} onClick={() => onClickItem(row)}>
 								{columns.map((value, idx) => (
-									<TableCell key={idx}>{row[value.field]}</TableCell>
+									<TableCell key={idx}>{formatText(row[value.field], value.type)}</TableCell>
 								))}
 								{(onEditItem || onDeleteItem || onAddToOrder) && (
 									<TableCell>

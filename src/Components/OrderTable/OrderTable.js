@@ -29,6 +29,15 @@ const OrderTable = ({ title, data, columns, onDeleteItem, onSubmitOrder }) => {
 	const classes = useStyles();
 	const totalPrice = data.reduce((value, item) => value + item.price, 0);
 
+	const formatText = (str, type) => {
+		if (type === 'date') {
+			return new Date(str).toLocaleDateString();
+		} else if (type === 'number') {
+			return Number(str).toLocaleString();
+		}
+		return str;
+	};
+
 	return (
 		<Paper>
 			<Toolbar className={classes.toolbar}>
@@ -50,7 +59,7 @@ const OrderTable = ({ title, data, columns, onDeleteItem, onSubmitOrder }) => {
 						{data.map((row, index) => (
 							<TableRow key={index}>
 								{columns.map((value, idx) => (
-									<TableCell key={idx}>{row[value.field]}</TableCell>
+									<TableCell key={idx}>{formatText(row[value.field], value.type)}</TableCell>
 								))}
 								<TableCell>
 									<IconButton
@@ -70,7 +79,7 @@ const OrderTable = ({ title, data, columns, onDeleteItem, onSubmitOrder }) => {
 								<h6>Total Price</h6>
 							</TableCell>
 							<TableCell>
-								<h6>{totalPrice}</h6>
+								<h6>{formatText(totalPrice, 'number')}</h6>
 							</TableCell>
 							{new Array(columns.length - 1).fill(0).map((val, idx) => (
 								<TableCell key={idx} />

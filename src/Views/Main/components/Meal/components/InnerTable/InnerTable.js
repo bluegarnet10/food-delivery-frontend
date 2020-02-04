@@ -18,7 +18,7 @@ const InnerTable = ({ restaurant_id, editable }) => {
 	const columns = [
 		{ title: 'Name', field: 'name' },
 		{ title: 'Description', field: 'description' },
-		{ title: 'Price', field: 'price' },
+		{ title: 'Price', field: 'price', type: 'number' },
 	];
 
 	const requestData = useCallback(

@@ -10,8 +10,8 @@ const InnerTable = () => {
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const columns = [
 		{ title: 'Restaurant', field: 'restaurant_name' },
-		{ title: 'Created', field: 'createdAt' },
-		{ title: 'Total Price', field: 'total_price' },
+		{ title: 'Created', field: 'createdAt', type: 'date' },
+		{ title: 'Total Price', field: 'total_price', type: 'number' },
 		{ title: 'Status', field: 'status' },
 	];
 
