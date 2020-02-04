@@ -31,7 +31,7 @@ const InnerTable = ({ editable }) => {
 			requestData();
 			setFirst(false);
 		}
-	}, [isFirst, getRestaurants, requestData]);
+	}, [isFirst, requestData]);
 
 	const handleChangePage = (e, newPage) => {
 		setPage(newPage);

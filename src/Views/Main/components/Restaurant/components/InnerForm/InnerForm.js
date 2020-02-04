@@ -2,10 +2,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
 import { MuiThemeProvider, RaisedButton, TextField } from 'material-ui';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Card, CardActions, CardContent, Typography } from '@material-ui/core';
 
 import { RestaurantContext } from 'Contexts/RestaurantContext';
 

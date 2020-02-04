@@ -58,6 +58,10 @@ const OrderContextProvider = ({ children }) => {
 		);
 	};
 
+	const getOrderById = id => {
+		return fetch(process.env.REACT_APP_REST_SERVER + '/order/' + id, options('get')).then(res => res.json());
+	};
+
 	return (
 		<OrderContext.Provider
 			value={{
@@ -66,6 +70,7 @@ const OrderContextProvider = ({ children }) => {
 				getOrders,
 				addOrder,
 				updateOrder,
+				getOrderById,
 			}}
 		>
 			{children}
