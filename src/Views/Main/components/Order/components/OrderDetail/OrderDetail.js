@@ -80,10 +80,8 @@ const OrderDetail = () => {
 
 	const handleBlockUser = e => {
 		e.stopPropagation();
-		blockUser(detail.user_id).then(res => {
-			if (!res.errors) {
-				history.push('/block');
-			}
+		blockUser(detail.user_id).then(() => {
+			history.push('/block');
 		});
 	};
 

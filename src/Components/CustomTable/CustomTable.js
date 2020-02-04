@@ -30,6 +30,16 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
+	tableItem: {
+		cursor: 'pointer',
+	},
+	noItem: {
+		width: '100%',
+		height: '100px',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 });
 
 const CustomTable = ({
@@ -109,63 +119,76 @@ const CustomTable = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data.map((row, index) => (
-							<TableRow key={index} onClick={() => onClickItem(row)}>
-								{columns.map((value, idx) => (
-									<TableCell key={idx}>{formatText(row[value.field], value.type)}</TableCell>
-								))}
-								{(onEditItem || onDeleteItem || onAddToOrder || onUnblockUser) && (
-									<TableCell>
-										{onEditItem && (
-											<IconButton
-												color="primary"
-												onClick={e => {
-													e.stopPropagation();
-													onEditItem(row);
-												}}
-											>
-												<EditIcon />
-											</IconButton>
-										)}
-										{onDeleteItem && (
-											<IconButton
-												color="secondary"
-												onClick={e => {
-													e.stopPropagation();
-													onDeleteItem(row);
-												}}
-											>
-												<DeleteIcon />
-											</IconButton>
-										)}
-										{onAddToOrder && (
-											<Button
-												variant="contained"
-												color="secondary"
-												onClick={e => {
-													e.stopPropagation();
-													onAddToOrder(row);
-												}}
-											>
-												Add To Order
-											</Button>
-										)}
-										{onUnblockUser && (
-											<Button
-												variant="contained"
-												color="secondary"
-												onClick={e => {
-													e.stopPropagation();
-													onUnblockUser(row);
-												}}
-											>
-												Unblock
-											</Button>
-										)}
-									</TableCell>
-								)}
+						{data.length > 0 ? (
+							data.map((row, index) => (
+								<TableRow
+									hover
+									key={index}
+									className={onClickItem ? classes.tableItem : ''}
+									onClick={() => onClickItem && onClickItem(row)}
+								>
+									{columns.map((value, idx) => (
+										<TableCell key={idx}>{formatText(row[value.field], value.type)}</TableCell>
+									))}
+									{(onEditItem || onDeleteItem || onAddToOrder || onUnblockUser) && (
+										<TableCell>
+											{onEditItem && (
+												<IconButton
+													color="primary"
+													onClick={e => {
+														e.stopPropagation();
+														onEditItem(row);
+													}}
+												>
+													<EditIcon />
+												</IconButton>
+											)}
+											{onDeleteItem && (
+												<IconButton
+													color="secondary"
+													onClick={e => {
+														e.stopPropagation();
+														onDeleteItem(row);
+													}}
+												>
+													<DeleteIcon />
+												</IconButton>
+											)}
+											{onAddToOrder && (
+												<Button
+													variant="contained"
+													color="secondary"
+													onClick={e => {
+														e.stopPropagation();
+														onAddToOrder(row);
+													}}
+												>
+													Add To Order
+												</Button>
+											)}
+											{onUnblockUser && (
+												<Button
+													variant="contained"
+													color="secondary"
+													onClick={e => {
+														e.stopPropagation();
+														onUnblockUser(row);
+													}}
+												>
+													Unblock
+												</Button>
+											)}
+										</TableCell>
+									)}
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={columns.length + 1}>
+									<Typography className={classes.noItem}>No records to display</Typography>
+								</TableCell>
 							</TableRow>
-						))}
+						)}
 					</TableBody>
 					<TableFooter>
 						<TableRow>
@@ -216,7 +239,7 @@ CustomTable.defaultProps = {
 	rowsPerPage: 5,
 	onChangePage: () => {},
 	onChangeRowsPerPage: () => {},
-	onClickItem: () => {},
+	onClickItem: null,
 	onAddItem: null,
 	onEditItem: null,
 	onDeleteItem: null,

@@ -59,7 +59,7 @@ const OrderTable = ({ title, data, columns, onDeleteItem, onSubmitOrder }) => {
 					</TableHead>
 					<TableBody>
 						{data.map((row, index) => (
-							<TableRow key={index}>
+							<TableRow hover key={index}>
 								{columns.map((value, idx) => (
 									<TableCell key={idx}>{formatText(row[value.field], value.type)}</TableCell>
 								))}
