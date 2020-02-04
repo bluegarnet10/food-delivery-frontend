@@ -12,7 +12,7 @@ const InnerTable = () => {
 		{ title: 'Restaurant', field: 'restaurant_name' },
 		{ title: 'Created', field: 'createdAt', type: 'date' },
 		{ title: 'Total Price', field: 'total_price', type: 'number' },
-		{ title: 'Status', field: 'status' },
+		{ title: 'Status', field: 'status', type: 'status' },
 	];
 
 	const requestData = useCallback(

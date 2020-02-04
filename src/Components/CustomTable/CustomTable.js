@@ -52,6 +52,31 @@ const CustomTable = ({
 			return new Date(str).toLocaleDateString();
 		} else if (type === 'number') {
 			return Number(str).toLocaleString();
+		} else if (type === 'status') {
+			if (str === 'Placed') {
+				return (
+					<Button variant="outlined" color="primary">
+						{str}
+					</Button>
+				);
+			} else if (str === 'Canceled') {
+				return (
+					<Button variant="outlined" color="secondary">
+						{str}
+					</Button>
+				);
+			} else if (str === 'Received') {
+				return (
+					<Button variant="contained" color="secondary">
+						{str}
+					</Button>
+				);
+			}
+			return (
+				<Button variant="contained" color="primary">
+					{str}
+				</Button>
+			);
 		}
 		return str;
 	};
