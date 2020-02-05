@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { showNotification } from 'Tools/showNotification';
 
 export const BlockContext = createContext();
 
@@ -40,22 +41,41 @@ const BlockContextProvider = ({ children }) => {
 				return res.json();
 			})
 			.then(res => {
-				if (res.errors) {
-					return res;
+				if (!res.errors) {
+					setBlockedUsers(res.blocks);
+				} else {
+					showNotification(res.errors.message, 'error');
 				}
-				setBlockedUsers(res.blocks);
 				return res;
 			});
 	};
 
 	const blockUser = user_id => {
 		const data = { user_id };
-		return fetch(process.env.REACT_APP_REST_SERVER + '/block', options('post', data)).then(res => res.json());
+		return fetch(process.env.REACT_APP_REST_SERVER + '/block', options('post', data))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const unBlockUser = user_id => {
 		const data = { user_id };
-		return fetch(process.env.REACT_APP_REST_SERVER + '/block', options('delete', data)).then(res => res.json());
+		return fetch(process.env.REACT_APP_REST_SERVER + '/block', options('delete', data))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	return (

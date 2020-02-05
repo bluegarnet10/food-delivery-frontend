@@ -32,7 +32,7 @@ const InnerTable = ({ restaurant_id, editable }) => {
 				}
 			});
 		},
-		[getMeals, page, restaurant_id, rowsPerPage]
+		[getMeals, history, page, restaurant_id, rowsPerPage]
 	);
 
 	useEffect(() => {

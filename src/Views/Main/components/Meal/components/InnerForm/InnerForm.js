@@ -41,14 +41,13 @@ const InnerForm = ({ restaurant_id, isEdit }) => {
 			setPrice(value);
 		}
 
-		const error = { ...errors, ...handleValidation(field, value) };
+		const error = { ...handleValidation(field, value) };
 		setErrors(error);
 	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
 		const error = {
-			...errors,
 			...handleValidation('name', name),
 			...handleValidation('description', description),
 		};

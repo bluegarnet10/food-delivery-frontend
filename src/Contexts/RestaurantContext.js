@@ -1,5 +1,7 @@
 import React, { createContext, useState } from 'react';
 
+import { showNotification } from 'Tools/showNotification';
+
 export const RestaurantContext = createContext();
 
 const RestaurantContextProvider = ({ children }) => {
@@ -40,31 +42,51 @@ const RestaurantContextProvider = ({ children }) => {
 				return res.json();
 			})
 			.then(res => {
-				if (res.errors) {
-					return res;
+				if (!res.errors) {
+					setRestaurants(res.restaurants);
+				} else {
+					showNotification(res.errors.message, 'error');
 				}
-				setRestaurants(res.restaurants);
 				return res;
 			});
 	};
 
 	const addRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('post', details)).then(res =>
-			res.json()
-		);
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant', options('post', details))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const updateRestaurant = details => {
-		return fetch(
-			process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id,
-			options('put', details)
-		).then(res => res.json());
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('put', details))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const deleteRestaurant = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('delete')).then(res =>
-			res.json()
-		);
+		return fetch(process.env.REACT_APP_REST_SERVER + '/restaurant/' + details._id, options('delete'))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+			});
 	};
 
 	return (

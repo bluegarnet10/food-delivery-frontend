@@ -34,10 +34,7 @@ const Signin = () => {
 			setName(value);
 		}
 
-		const error = { ...errors, ...handleValidation(field, value) };
-		if (errors.invalidCredentials) {
-			delete errors.invalidCredentials;
-		}
+		const error = { ...handleValidation(field, value) };
 		setErrors(error);
 	};
 
@@ -48,7 +45,6 @@ const Signin = () => {
 	const handleSubmit = e => {
 		e.preventDefault();
 		const error = {
-			...errors,
 			...handleValidation('email', email),
 			...handleValidation('password', password),
 			...handleValidation('name', name),

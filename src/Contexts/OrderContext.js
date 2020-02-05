@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { showNotification } from 'Tools/showNotification';
 
 export const OrderContext = createContext();
 
@@ -40,26 +41,52 @@ const OrderContextProvider = ({ children }) => {
 				return res.json();
 			})
 			.then(res => {
-				if (res.errors) {
-					return res;
+				if (!res.errors) {
+					setOrders(res.orders);
+				} else {
+					showNotification(res.errors.message, 'error');
 				}
-				setOrders(res.orders);
 				return res;
 			});
 	};
 
 	const addOrder = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/order', options('post', details)).then(res => res.json());
+		return fetch(process.env.REACT_APP_REST_SERVER + '/order', options('post', details))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const updateOrder = details => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/order/' + details._id, options('put', details)).then(res =>
-			res.json()
-		);
+		return fetch(process.env.REACT_APP_REST_SERVER + '/order/' + details._id, options('put', details))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const getOrderById = id => {
-		return fetch(process.env.REACT_APP_REST_SERVER + '/order/' + id, options('get')).then(res => res.json());
+		return fetch(process.env.REACT_APP_REST_SERVER + '/order/' + id, options('get'))
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	return (

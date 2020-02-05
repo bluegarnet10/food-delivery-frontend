@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { showNotification } from 'Tools/showNotification';
 
 export const MealContext = createContext();
 
@@ -42,10 +43,11 @@ const MealContextProvider = ({ children }) => {
 				return res.json();
 			})
 			.then(res => {
-				if (res.errors) {
-					return res;
+				if (!res.errors) {
+					setMeals(res.meals);
+				} else {
+					showNotification(res.errors.message, 'error');
 				}
-				setMeals(res.meals);
 				return res;
 			});
 	};
@@ -54,21 +56,48 @@ const MealContextProvider = ({ children }) => {
 		return fetch(
 			process.env.REACT_APP_REST_SERVER + '/restaurant/' + restaurant_id + '/meal',
 			options('post', details)
-		).then(res => res.json());
+		)
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const updateMeal = (restaurant_id, details) => {
 		return fetch(
 			process.env.REACT_APP_REST_SERVER + '/restaurant/' + restaurant_id + '/meal/' + details._id,
 			options('put', details)
-		).then(res => res.json());
+		)
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	const deleteMeal = (restaurant_id, details) => {
 		return fetch(
 			process.env.REACT_APP_REST_SERVER + '/restaurant/' + restaurant_id + '/meal/' + details._id,
 			options('delete')
-		).then(res => res.json());
+		)
+			.then(res => res.json())
+			.then(res => {
+				if (res.errors && res.errors.message) {
+					showNotification(res.errors.message, 'error');
+				} else if (!res.errors && res.message) {
+					showNotification(res.message, 'success');
+				}
+				return res;
+			});
 	};
 
 	return (
